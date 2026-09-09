@@ -1,11 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { ArrowRight, Mail, MapPin, Phone } from "lucide-react";
+import { ArrowRight, Check, LoaderCircle, Mail, MapPin, Phone } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
 import { PageHeader } from "@/components/PageHeader";
 import { Reveal } from "@/components/Reveal";
 import { SocialSection } from "@/components/SocialSection";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -34,6 +35,7 @@ const details = [
 
 function ContactPage() {
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
 
   return (
     <>
@@ -53,8 +55,13 @@ function ContactPage() {
           <Reveal>
             <form
               className="glass-panel space-y-5 p-8"
-              onSubmit={(e) => {
+              onSubmit={async (e) => {
                 e.preventDefault();
+                if (sending) return;
+                setSent(false);
+                setSending(true);
+                await new Promise((resolve) => window.setTimeout(resolve, 700));
+                setSending(false);
                 setSent(true);
                 toast.success("Thanks — we'll be in touch within one working day.");
                 (e.currentTarget as HTMLFormElement).reset();
@@ -68,7 +75,7 @@ function ContactPage() {
                   <input
                     required
                     name="name"
-                    className="mt-2 w-full rounded-lg border border-input bg-background/60 px-4 py-3 text-sm outline-none transition-colors focus:border-accent"
+                    className="form-control mt-2 w-full rounded-lg border border-input bg-background/60 px-4 py-3 text-sm outline-none"
                     placeholder="Your name"
                   />
                 </label>
@@ -80,7 +87,7 @@ function ContactPage() {
                     required
                     type="email"
                     name="email"
-                    className="mt-2 w-full rounded-lg border border-input bg-background/60 px-4 py-3 text-sm outline-none transition-colors focus:border-accent"
+                    className="form-control mt-2 w-full rounded-lg border border-input bg-background/60 px-4 py-3 text-sm outline-none"
                     placeholder="you@company.com"
                   />
                 </label>
@@ -93,13 +100,19 @@ function ContactPage() {
                   required
                   name="message"
                   rows={6}
-                  className="mt-2 w-full resize-none rounded-lg border border-input bg-background/60 px-4 py-3 text-sm outline-none transition-colors focus:border-accent"
+                  className="form-control mt-2 w-full resize-none rounded-lg border border-input bg-background/60 px-4 py-3 text-sm outline-none"
                   placeholder="What are you building, and what does success look like?"
                 />
               </label>
-              <button type="submit" className="btn-solid">
-                Send message <ArrowRight className="h-4 w-4" />
-              </button>
+              <Button type="submit" className="btn-solid min-w-40" disabled={sending}>
+                {sending ? (
+                  <>Sending <LoaderCircle className="h-4 w-4 animate-spin" /></>
+                ) : sent ? (
+                  <>Message sent <Check className="h-4 w-4 success-check" /></>
+                ) : (
+                  <>Send message <ArrowRight className="h-4 w-4" /></>
+                )}
+              </Button>
               {sent ? (
                 <p className="text-xs text-accent">
                   Message noted. Connect a backend later to deliver these to your inbox.

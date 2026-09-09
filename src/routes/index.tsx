@@ -6,6 +6,7 @@ import { CatalogCard } from "@/components/CatalogCard";
 import { Reveal } from "@/components/Reveal";
 import { SectionHeading, SectionTag } from "@/components/SectionHeading";
 import { SocialSection } from "@/components/SocialSection";
+import { StatValue } from "@/components/StatValue";
 import { products, services, stats } from "@/data/site";
 
 export const Route = createFileRoute("/")({
@@ -70,7 +71,7 @@ function Home() {
             <dl className="mt-16 grid max-w-3xl grid-cols-2 gap-6 sm:grid-cols-4">
               {stats.map((s) => (
                 <div key={s.label} className="glass-panel px-5 py-4">
-                  <dt className="font-display text-2xl font-semibold text-primary">{s.value}</dt>
+                  <StatValue value={s.value} />
                   <dd className="mt-1 text-xs tracking-wide text-muted-foreground uppercase">
                     {s.label}
                   </dd>

@@ -51,7 +51,7 @@ export function SocialSection() {
                   href={s.href}
                   target="_blank"
                   rel="noreferrer"
-                  className="depth-card group flex items-center justify-between gap-4 p-6"
+                  className="social-card depth-card group flex items-center justify-between gap-4 p-6"
                 >
                   <span className="flex items-center gap-3">
                     <Icon className="h-5 w-5 text-accent" />

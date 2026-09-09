@@ -2,13 +2,14 @@ import { Link } from "@tanstack/react-router";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { navLinks } from "@/data/site";
+import { Button } from "@/components/ui/button";
 import { CursorGrid } from "./CursorGrid";
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="fixed top-0 z-40 w-full border-b border-border/60 bg-background/70 backdrop-blur-xl">
+    <header className="nav-enter fixed top-0 z-40 w-full border-b border-border/60 bg-background/70 backdrop-blur-xl">
       <CursorGrid />
       <nav className="container-x relative flex h-16 items-center justify-between">
         <Link to="/" className="flex items-center gap-2.5" onClick={() => setOpen(false)}>
@@ -22,7 +23,7 @@ export function Navbar() {
               key={l.to}
               to={l.to}
               activeOptions={{ exact: l.to === "/" }}
-              className="text-sm text-muted-foreground transition-colors hover:text-foreground [&.active]:text-accent"
+              className="nav-link text-sm text-muted-foreground transition-colors hover:text-foreground [&.active]:text-accent"
             >
               {l.label}
             </Link>
@@ -32,25 +33,30 @@ export function Navbar() {
           </Link>
         </div>
 
-        <button
+        <Button
           type="button"
+          variant="outline"
+          size="icon"
           aria-label={open ? "Close menu" : "Open menu"}
+          aria-expanded={open}
+          aria-controls="mobile-navigation"
           onClick={() => setOpen((v) => !v)}
-          className="rounded-md border border-border p-2 lg:hidden"
+          className="lg:hidden"
         >
           {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </button>
+        </Button>
       </nav>
 
       {open ? (
-        <div className="border-t border-border/60 bg-background/95 backdrop-blur-xl lg:hidden">
+        <div id="mobile-navigation" className="mobile-menu border-t border-border/60 bg-background/95 backdrop-blur-xl lg:hidden">
           <div className="container-x flex flex-col gap-1 py-4">
-            {navLinks.map((l) => (
+            {navLinks.map((l, index) => (
               <Link
                 key={l.to}
                 to={l.to}
                 onClick={() => setOpen(false)}
-                className="rounded-md px-2 py-3 text-sm text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground [&.active]:text-accent"
+                className="mobile-menu-link rounded-md px-2 py-3 text-sm text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground [&.active]:text-accent"
+                style={{ animationDelay: `${index * 60}ms` }}
                 activeOptions={{ exact: l.to === "/" }}
               >
                 {l.label}
